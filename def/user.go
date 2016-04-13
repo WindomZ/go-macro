@@ -2,6 +2,7 @@ package def
 
 import (
 	"fmt"
+	"github.com/WindomZ/go-random/random"
 	"time"
 )
 
@@ -22,4 +23,8 @@ func GetDefaultEmail() string {
 
 func GetDefaultFormat(tag string) string {
 	return fmt.Sprintf("%v-%v%v", tag, time.Now().Unix(), DiceValue())
+}
+
+func GetDefaultSalt(n int) string {
+	return random.RandomString(n)
 }

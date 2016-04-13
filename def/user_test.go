@@ -14,3 +14,7 @@ func TestGetDefaultTel(t *testing.T) {
 func TestGetDefaultEmail(t *testing.T) {
 	t.Log(GetDefaultEmail())
 }
+
+func TestGetDefaultSalt(t *testing.T) {
+	t.Log(GetDefaultSalt(8))
+}
