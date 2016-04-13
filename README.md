@@ -2,9 +2,7 @@
 
 ## Overview
 
-* Some practical macros
-
-# Getting Started
+* Some useful macros
 
 ## Installation
 
@@ -15,7 +13,7 @@ go get -u github.com/WindomZ/go-macro
 ## TODO
 
 * Usage and more demos
-* More practical functions
+* More useful functions
 
 ## LICENSE
 
