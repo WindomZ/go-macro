@@ -11,9 +11,40 @@ import (
 	"strings"
 )
 
-var defaultClient = &http.Client{}
+type HttpClient struct {
+	client *http.Client
+	Header map[string]string
+}
 
-func Post(url string, session string, data interface{}) (*http.Response, error) {
+func NewHttpClient() *HttpClient {
+	return &HttpClient{client: &http.Client{}}
+}
+
+func (s *HttpClient) Clear() {
+	s.Header = nil
+}
+
+func (s *HttpClient) SetHeader(key, value string) *HttpClient {
+	if len(key) == 0 {
+		return s
+	} else if s.Header == nil {
+		s.Header = make(map[string]string)
+	}
+	s.Header[key] = value
+	return s
+}
+
+func (s *HttpClient) setRequestHeader(r *http.Request) *http.Request {
+	if r == nil || s.Header == nil || len(s.Header) == 0 {
+		return r
+	}
+	for k, v := range s.Header {
+		r.Header.Set(k, v)
+	}
+	return r
+}
+
+func (s *HttpClient) Post(url string, data interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 	if data != nil {
 		j, err := json.Marshal(data)
@@ -26,14 +57,11 @@ func Post(url string, session string, data interface{}) (*http.Response, error) 
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	if len(session) > 0 {
-		req = SignedWithRequest(req, session)
-	}
-	return defaultClient.Do(req)
+	s.setRequestHeader(req).Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	return s.client.Do(req)
 }
 
-func Put(url string, session string, data interface{}) (*http.Response, error) {
+func (s *HttpClient) Put(url string, data interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 	if data != nil {
 		j, err := json.Marshal(data)
@@ -46,25 +74,19 @@ func Put(url string, session string, data interface{}) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	if len(session) > 0 {
-		req = SignedWithRequest(req, session)
-	}
-	return defaultClient.Do(req)
+	s.setRequestHeader(req).Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	return s.client.Do(req)
 }
 
-func Get(url string, session string) (*http.Response, error) {
+func (s *HttpClient) Get(url string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-	if len(session) > 0 {
-		req = SignedWithRequest(req, session)
-	}
-	return defaultClient.Do(req)
+	return s.client.Do(s.setRequestHeader(req))
 }
 
-func Delete(url string, session string, data interface{}) (*http.Response, error) {
+func (s *HttpClient) Delete(url string, data interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 	if data != nil {
 		j, err := json.Marshal(data)
@@ -77,14 +99,11 @@ func Delete(url string, session string, data interface{}) (*http.Response, error
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	if len(session) > 0 {
-		req = SignedWithRequest(req, session)
-	}
-	return defaultClient.Do(req)
+	s.setRequestHeader(req).Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	return s.client.Do(req)
 }
 
-func PostFile(url string, session string, filepath string) (*http.Response, error) {
+func (s *HttpClient) PostFile(url string, filepath string) (*http.Response, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 	fh, err := os.Open(filepath)
@@ -109,23 +128,17 @@ func PostFile(url string, session string, filepath string) (*http.Response, erro
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", contentType)
-	if len(session) > 0 {
-		req = SignedWithRequest(req, session)
-	}
-	return defaultClient.Do(req)
+	s.setRequestHeader(req).Header.Set("Content-Type", contentType)
+	return s.client.Do(req)
 }
 
-func GetFile(url string, session string, filepath string) (*http.Response, error) {
+func (s *HttpClient) GetFile(url string, filepath string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "multipart/form-data")
-	if len(session) > 0 {
-		req = SignedWithRequest(req, session)
-	}
-	resp, err := defaultClient.Do(req)
+	s.setRequestHeader(req).Header.Set("Content-Type", "multipart/form-data")
+	resp, err := s.client.Do(req)
 	defer resp.Body.Close()
 
 	err = os.MkdirAll(path.Dir(filepath), 0766)
