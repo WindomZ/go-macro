@@ -22,3 +22,7 @@ func ValidId(id string) bool {
 	}
 	return false
 }
+
+func ValidTimeID(id string) bool {
+	return len(id) == 12
+}
