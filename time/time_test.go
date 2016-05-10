@@ -5,7 +5,12 @@ import (
 	"time"
 )
 
-func TestDateNextDayZeroTime(t *testing.T) {
+func TestDateNextDayFirstTime(t *testing.T) {
 	t.Logf("Now: %v", time.Now())
-	t.Logf("NextDay: %v", DateNextDayZeroTime())
+	t.Logf("NextDay: %v", DateNextDayFirstTime())
+}
+
+func TestDateNextDayLastTime(t *testing.T) {
+	t.Logf("Now: %v", time.Now())
+	t.Logf("NextDay: %v", DateNextDayLastTime())
 }
