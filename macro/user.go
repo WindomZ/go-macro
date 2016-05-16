@@ -15,3 +15,7 @@ func ValidPassword(pwd string) bool {
 	l := len(pwd)
 	return (l >= MIN_LEN_PASSWORD && l <= MAX_LEN_PASSWORD)
 }
+
+func ValidBitCoinUsername(name string) bool {
+	return len(name) == 34
+}
