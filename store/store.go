@@ -9,6 +9,7 @@ import (
 type Store interface {
 	Set(id string, digits []byte)
 	Get(id string, clear bool) (digits []byte)
+	Remove(id string)
 }
 
 type idByTimeValue struct {
@@ -82,4 +83,13 @@ func (s *memoryStore) collect() {
 			return
 		}
 	}
+}
+
+func (s *memoryStore) Remove(id string) {
+	if len(id) == 0 {
+		return
+	}
+	s.Lock()
+	defer s.Unlock()
+	delete(s.digitsById, id)
 }

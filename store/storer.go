@@ -26,3 +26,7 @@ func Fetch(id string, clear bool) string {
 	}
 	return string(b)
 }
+
+func Remove(id string) {
+	GetStore().Remove(id)
+}
