@@ -92,3 +92,39 @@ func (p UnitPrice) String() string {
 func (p UnitPrice) StringFloat() string {
 	return strconv.FormatFloat(p.Float64(), 'f', UnitPricePrecision, 64)
 }
+
+// rounded difference p+q and returns
+func (p UnitPrice) Add(q UnitPrice) UnitPrice {
+	return UnitPrice(p.Int64() + q.Int64())
+}
+
+// rounded difference p-q and returns
+func (p UnitPrice) Sub(q UnitPrice) UnitPrice {
+	return UnitPrice(p.Int64() - q.Int64())
+}
+
+// rounded product p*q and returns
+func (p UnitPrice) Mul(q UnitPrice) UnitPrice {
+	return UnitPrice(p.Int64() * q.Int64())
+}
+
+// rounded quotient p/q and returns
+func (p UnitPrice) Quo(q UnitPrice) UnitPrice {
+	return UnitPrice(p.Int64() / q.Int64())
+}
+
+// Cmp compares p and p and returns:
+//
+//   -1 if p <  p
+//    0 if p == p (incl. -0 == 0, -Inf == -Inf, and +Inf == +Inf)
+//   +1 if p >  p
+//
+func (p UnitPrice) Cmp(q UnitPrice) int {
+	switch {
+	case p.Int64() < q.Int64():
+		return -1
+	case p.Int64() > q.Int64():
+		return +1
+	}
+	return 0
+}
