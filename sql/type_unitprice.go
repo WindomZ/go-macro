@@ -21,10 +21,8 @@ func SetUnitPricePrecision(e int) {
 
 type UnitPrice int64
 
-func NewUnitPrice(i int64) *UnitPrice {
-	p := new(UnitPrice)
-	p.SetInt64(i)
-	return p
+func NewUnitPrice(i int64) UnitPrice {
+	return UnitPrice(i)
 }
 
 func (p *UnitPrice) MarshalJSON() ([]byte, error) {
@@ -75,16 +73,16 @@ func (p UnitPrice) Int64() int64 {
 	return int64(p)
 }
 
-func (p UnitPrice) SetInt64(i int64) {
-	p = UnitPrice(i)
+func (p *UnitPrice) SetInt64(i int64) {
+	*p = UnitPrice(i)
 }
 
 func (p UnitPrice) Float64() float64 {
 	return float64(p) / UnitPricePow
 }
 
-func (p UnitPrice) SetFloat64(f float64) {
-	p = UnitPrice(int64(f * UnitPricePow))
+func (p *UnitPrice) SetFloat64(f float64) {
+	*p = UnitPrice(int64(f * UnitPricePow))
 }
 
 func (p UnitPrice) String() string {
