@@ -73,16 +73,18 @@ func (p UnitPrice) Int64() int64 {
 	return int64(p)
 }
 
-func (p *UnitPrice) SetInt64(i int64) {
+func (p *UnitPrice) SetInt64(i int64) *UnitPrice {
 	*p = UnitPrice(i)
+	return p
 }
 
 func (p UnitPrice) Float64() float64 {
 	return float64(p) / UnitPricePow
 }
 
-func (p *UnitPrice) SetFloat64(f float64) {
+func (p *UnitPrice) SetFloat64(f float64) *UnitPrice {
 	*p = UnitPrice(int64(f * UnitPricePow))
+	return p
 }
 
 func (p UnitPrice) String() string {
@@ -93,24 +95,24 @@ func (p UnitPrice) StringFloat() string {
 	return strconv.FormatFloat(p.Float64(), 'f', UnitPricePrecision, 64)
 }
 
-// rounded difference p+q and returns
-func (p UnitPrice) Add(q UnitPrice) UnitPrice {
-	return UnitPrice(p.Int64() + q.Int64())
+// rounded difference p+q and returns p
+func (p *UnitPrice) Add(q UnitPrice) *UnitPrice {
+	return p.SetInt64(p.Int64() + q.Int64())
 }
 
-// rounded difference p-q and returns
-func (p UnitPrice) Sub(q UnitPrice) UnitPrice {
-	return UnitPrice(p.Int64() - q.Int64())
+// rounded difference p-q and returns p
+func (p *UnitPrice) Sub(q UnitPrice) *UnitPrice {
+	return p.SetInt64(p.Int64() - q.Int64())
 }
 
-// rounded product p*q and returns
-func (p UnitPrice) Mul(q UnitPrice) UnitPrice {
-	return UnitPrice(p.Int64() * q.Int64())
+// rounded product p*q and returns p
+func (p *UnitPrice) Mul(q UnitPrice) *UnitPrice {
+	return p.SetInt64(p.Int64() * q.Int64())
 }
 
-// rounded quotient p/q and returns
-func (p UnitPrice) Quo(q UnitPrice) UnitPrice {
-	return UnitPrice(p.Int64() / q.Int64())
+// rounded quotient p/q and returns p
+func (p *UnitPrice) Quo(q UnitPrice) *UnitPrice {
+	return p.SetInt64(p.Int64() / q.Int64())
 }
 
 // Cmp compares p and p and returns:
