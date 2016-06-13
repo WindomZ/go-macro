@@ -21,6 +21,10 @@ func GetDefaultEmail() string {
 	return GetDefaultFormat("#email")
 }
 
+func GetDefaultCert() string {
+	return GetDefaultFormat("#cert")
+}
+
 func GetDefaultFormat(tag string) string {
 	return fmt.Sprintf("%v-%v%v", tag, time.Now().Unix(), tv())
 }
