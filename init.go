@@ -9,7 +9,9 @@ import (
 	_ "github.com/WindomZ/go-macro/macro"
 	_ "github.com/WindomZ/go-macro/math"
 	_ "github.com/WindomZ/go-macro/pinyin"
+	_ "github.com/WindomZ/go-macro/sqlx"
 	_ "github.com/WindomZ/go-macro/store"
+	_ "github.com/WindomZ/go-macro/struct"
 	_ "github.com/WindomZ/go-macro/time"
 	_ "github.com/WindomZ/go-macro/uuid"
 )
