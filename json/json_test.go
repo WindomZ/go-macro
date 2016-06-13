@@ -1,29 +1,28 @@
 package gojson
 
 import (
+	"bytes"
 	"encoding/json"
-	"github.com/buger/jsonparser"
-	"github.com/fatih/structs"
 	"testing"
 )
 
 type testLayer1 struct {
 	testLayer2   `json:""`
 	String1      string     `json:"string1"`
-	Int1         int64      `json:"int1"`
+	Int1         int64      `json:"int1,string"`
 	ArrayString1 []string   `json:"strings1"`
 	Layer3       testLayer3 `json:""`
 }
 
 type testLayer2 struct {
 	String2      string   `json:"string2"`
-	Int2         int64    `json:"int2"`
+	Int2         int64    `json:"int2,string"`
 	ArrayString2 []string `json:"strings2"`
 }
 
 type testLayer3 struct {
 	String3      string   `json:"string3"`
-	Int3         int64    `json:"int3"`
+	Int3         int64    `json:"int3,string"`
 	ArrayString3 []string `json:"strings3"`
 }
 
@@ -59,10 +58,28 @@ func TestJsonParser(t *testing.T) {
 		t.Fatal(err)
 	} else {
 		t.Log(string(data))
-		//t.Logf("%#v", structs.Names(s))
-		StructFields(s)
-		jsonparser.EachKey(data, func(i int, value []byte, dataType jsonparser.ValueType, err error) {
-			t.Logf("%#v", string(value))
-		}, structs.Names(s))
+		////t.Logf("%#v", structs.Names(s))
+		//jsonparser.EachKey(data, func(i int, value []byte, dataType jsonparser.ValueType, err error) {
+		//	t.Logf("%#v", string(value))
+		//}, structs.Names(s))
+		var ss testLayer1
+		if err := json.Unmarshal(data, &ss); err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%#v", ss)
+
+		dec := json.NewDecoder(bytes.NewReader(data))
+		var buf bytes.Buffer
+		enc := json.NewEncoder(&buf)
+		var v map[string]interface{}
+		if err := dec.Decode(&v); err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%#v", v)
+		if err := enc.Encode(&v); err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%#v", string(buf.Bytes()))
 	}
+
 }
