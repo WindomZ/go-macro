@@ -1,5 +1,7 @@
 package gojson
 
+import "encoding/json"
+
 func Unmarshal(data []byte, v interface{}) error {
-	return nil
+	return json.Unmarshal(data, v)
 }

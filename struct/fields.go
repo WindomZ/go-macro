@@ -1,4 +1,4 @@
-package gojson
+package gostruct
 
 import (
 	"fmt"

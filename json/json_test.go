@@ -54,16 +54,12 @@ func TestJsonParser(t *testing.T) {
 			},
 		},
 	}
-	if data, err := json.Marshal(s); err != nil {
+	if data, err := Marshal(s); err != nil {
 		t.Fatal(err)
 	} else {
 		t.Log(string(data))
-		////t.Logf("%#v", structs.Names(s))
-		//jsonparser.EachKey(data, func(i int, value []byte, dataType jsonparser.ValueType, err error) {
-		//	t.Logf("%#v", string(value))
-		//}, structs.Names(s))
 		var ss testLayer1
-		if err := json.Unmarshal(data, &ss); err != nil {
+		if err := Unmarshal(data, &ss); err != nil {
 			t.Fatal(err)
 		}
 		t.Logf("%#v", ss)
