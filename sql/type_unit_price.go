@@ -95,12 +95,28 @@ func (p UnitPrice) StringFloat() string {
 	return strconv.FormatFloat(p.Float64(), 'f', UnitPricePrecision, 64)
 }
 
-// rounded difference p+q and returns p
+func (p *UnitPrice) IsPositive() bool {
+	return p.Int64() > 0
+}
+
+func (p *UnitPrice) IsNegative() bool {
+	return p.Int64() < 0
+}
+
+func (p *UnitPrice) Zero() {
+	p.SetInt64(0)
+}
+
+func (p *UnitPrice) IsZero() bool {
+	return p.Int64() == 0
+}
+
+// rounded p+q and returns p
 func (p *UnitPrice) Add(q UnitPrice) *UnitPrice {
 	return p.SetInt64(p.Int64() + q.Int64())
 }
 
-// rounded difference p-q and returns p
+// rounded p-q and returns p
 func (p *UnitPrice) Sub(q UnitPrice) *UnitPrice {
 	return p.SetInt64(p.Int64() - q.Int64())
 }
@@ -113,6 +129,45 @@ func (p *UnitPrice) Mul(q UnitPrice) *UnitPrice {
 // rounded quotient p/q and returns p
 func (p *UnitPrice) Quo(q UnitPrice) *UnitPrice {
 	return p.SetInt64(p.Int64() / q.Int64())
+}
+
+// rounded p+x... and returns p
+func (p *UnitPrice) Sum(x ...UnitPrice) *UnitPrice {
+	for _, y := range x {
+		p.Add(y)
+	}
+	return p
+}
+
+// rounded p-x... and returns p
+func (p *UnitPrice) Diff(x ...UnitPrice) *UnitPrice {
+	for _, y := range x {
+		p.Sub(y)
+	}
+	return p
+}
+
+// rounded p+x... and returns
+func (p UnitPrice) GetSum(x ...UnitPrice) UnitPrice {
+	sum := p.Int64()
+	for _, y := range x {
+		sum += y.Int64()
+	}
+	return NewUnitPrice(sum)
+}
+
+// rounded p+x... and returns
+func (p UnitPrice) GetDiff(x ...UnitPrice) UnitPrice {
+	diff := p.Int64()
+	for _, y := range x {
+		diff -= y.Int64()
+	}
+	return NewUnitPrice(diff)
+}
+
+// returns negation
+func (p UnitPrice) GetNegation() UnitPrice {
+	return NewUnitPrice(-p.Int64())
 }
 
 // Cmp compares p and p and returns:
