@@ -25,6 +25,10 @@ func GetDefaultCert() string {
 	return GetDefaultFormat("#cert")
 }
 
+func GetDefaultBank() string {
+	return GetDefaultFormat("#bank")
+}
+
 func GetDefaultFormat(tag string) string {
 	return fmt.Sprintf("%v-%v%v", tag, time.Now().Unix(), tv())
 }
