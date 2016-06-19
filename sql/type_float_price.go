@@ -121,6 +121,26 @@ func (p *FloatPrice) IsZero() bool {
 	return p.Float64() == 0
 }
 
+func (p *FloatPrice) Equal(f float64) bool {
+	return p.Float64() == f
+}
+
+func (p *FloatPrice) LessThan(f float64) bool {
+	return p.Float64() < f
+}
+
+func (p *FloatPrice) LessEqual(f float64) bool {
+	return p.Float64() <= f
+}
+
+func (p *FloatPrice) GreaterThan(f float64) bool {
+	return p.Float64() > f
+}
+
+func (p *FloatPrice) GreaterEqual(f float64) bool {
+	return p.Float64() >= f
+}
+
 // rounded p+q and returns p
 func (p *FloatPrice) Add(q FloatPrice) *FloatPrice {
 	return p.SetFloat64(p.Float64() + q.Float64())

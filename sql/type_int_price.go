@@ -25,6 +25,10 @@ func NewIntPrice(i int64) IntPrice {
 	return IntPrice(i)
 }
 
+func NewIntPriceFloat(i float64) IntPrice {
+	return IntPrice(int64(i * IntPricePow))
+}
+
 func (p *IntPrice) MarshalJSON() ([]byte, error) {
 	if p == nil {
 		return nil, errors.New("MarshalJSON on nil pointer")
@@ -109,6 +113,26 @@ func (p *IntPrice) Zero() {
 
 func (p *IntPrice) IsZero() bool {
 	return p.Int64() == 0
+}
+
+func (p *IntPrice) Equal(i int64) bool {
+	return p.Int64() == i
+}
+
+func (p *IntPrice) LessThan(i int64) bool {
+	return p.Int64() < i
+}
+
+func (p *IntPrice) LessEqual(i int64) bool {
+	return p.Int64() <= i
+}
+
+func (p *IntPrice) GreaterThan(i int64) bool {
+	return p.Int64() > i
+}
+
+func (p *IntPrice) GreaterEqual(i int64) bool {
+	return p.Int64() >= i
 }
 
 // rounded p+q and returns p
