@@ -115,24 +115,24 @@ func (p *IntPrice) IsZero() bool {
 	return p.Int64() == 0
 }
 
-func (p *IntPrice) Equal(i int64) bool {
-	return p.Int64() == i
+func (p *IntPrice) Equal(f float64) bool {
+	return p.Float64() == f
 }
 
-func (p *IntPrice) LessThan(i int64) bool {
-	return p.Int64() < i
+func (p *IntPrice) LessThan(f float64) bool {
+	return p.Float64() < f
 }
 
-func (p *IntPrice) LessEqual(i int64) bool {
-	return p.Int64() <= i
+func (p *IntPrice) LessEqual(f float64) bool {
+	return p.Float64() <= f
 }
 
-func (p *IntPrice) GreaterThan(i int64) bool {
-	return p.Int64() > i
+func (p *IntPrice) GreaterThan(f float64) bool {
+	return p.Float64() > f
 }
 
-func (p *IntPrice) GreaterEqual(i int64) bool {
-	return p.Int64() >= i
+func (p *IntPrice) GreaterEqual(f float64) bool {
+	return p.Float64() >= f
 }
 
 // rounded p+q and returns p
