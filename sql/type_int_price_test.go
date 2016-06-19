@@ -5,16 +5,16 @@ import (
 	"testing"
 )
 
-type testUnitPrice struct {
-	Price1 UnitPrice `json:"price1"`
-	Price2 UnitPrice `json:"price2"`
+type testIntPrice struct {
+	Price1 IntPrice `json:"price1"`
+	Price2 IntPrice `json:"price2"`
 }
 
-func TestJSONUnitPrice(t *testing.T) {
-	SetUnitPricePrecision(5)
-	p := &testUnitPrice{
-		Price1: NewUnitPrice(101234),
-		Price2: NewUnitPrice(201234),
+func TestJSONIntPrice(t *testing.T) {
+	SetIntPricePrecision(5)
+	p := &testIntPrice{
+		Price1: NewIntPrice(101234),
+		Price2: NewIntPrice(201234),
 	}
 	t.Logf("%#v", p)
 	data, err := gojson.Marshal(p)
@@ -22,7 +22,7 @@ func TestJSONUnitPrice(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("%#v", string(data))
-	var pp testUnitPrice
+	var pp testIntPrice
 	if err := gojson.Unmarshal(data, &pp); err != nil {
 		t.Fatal(err)
 	}

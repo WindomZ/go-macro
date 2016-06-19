@@ -10,22 +10,22 @@ import (
 )
 
 var (
-	UnitPricePrecision int     = 2
-	UnitPricePow       float64 = math.Pow10(UnitPricePrecision)
+	IntPricePrecision int     = 2
+	IntPricePow       float64 = math.Pow10(IntPricePrecision)
 )
 
-func SetUnitPricePrecision(e int) {
-	UnitPricePrecision = e
-	UnitPricePow = math.Pow10(UnitPricePrecision)
+func SetIntPricePrecision(e int) {
+	IntPricePrecision = e
+	IntPricePow = math.Pow10(IntPricePrecision)
 }
 
-type UnitPrice int64
+type IntPrice int64
 
-func NewUnitPrice(i int64) UnitPrice {
-	return UnitPrice(i)
+func NewIntPrice(i int64) IntPrice {
+	return IntPrice(i)
 }
 
-func (p *UnitPrice) MarshalJSON() ([]byte, error) {
+func (p *IntPrice) MarshalJSON() ([]byte, error) {
 	if p == nil {
 		return nil, errors.New("MarshalJSON on nil pointer")
 	}
@@ -36,7 +36,7 @@ func (p *UnitPrice) MarshalJSON() ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-func (p *UnitPrice) UnmarshalJSON(data []byte) error {
+func (p *IntPrice) UnmarshalJSON(data []byte) error {
 	if p == nil {
 		return errors.New("UnmarshalJSON on nil pointer")
 	} else if f, err := strconv.ParseFloat(strings.Replace(string(data), `"`, ``, -1), 64); err != nil {
@@ -47,92 +47,92 @@ func (p *UnitPrice) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (p UnitPrice) Value() (driver.Value, error) {
+func (p IntPrice) Value() (driver.Value, error) {
 	return p.Int64(), nil
 }
 
-func (p *UnitPrice) Scan(src interface{}) error {
+func (p *IntPrice) Scan(src interface{}) error {
 	switch o := src.(type) {
 	case int, int8, int16, int32, int64:
-		*p = UnitPrice(o.(int64))
+		*p = IntPrice(o.(int64))
 	case string:
 		i, err := strconv.ParseInt(o, 10, 64)
 		if err != nil {
 			return err
 		}
-		*p = UnitPrice(i)
+		*p = IntPrice(i)
 	case []byte:
 		return p.Scan(string(o))
 	default:
-		return errors.New("Incompatible type for UnitPrice")
+		return errors.New("Incompatible type for IntPrice")
 	}
 	return nil
 }
 
-func (p UnitPrice) Int64() int64 {
+func (p IntPrice) Int64() int64 {
 	return int64(p)
 }
 
-func (p *UnitPrice) SetInt64(i int64) *UnitPrice {
-	*p = UnitPrice(i)
+func (p *IntPrice) SetInt64(i int64) *IntPrice {
+	*p = IntPrice(i)
 	return p
 }
 
-func (p UnitPrice) Float64() float64 {
-	return float64(p) / UnitPricePow
+func (p IntPrice) Float64() float64 {
+	return float64(p) / IntPricePow
 }
 
-func (p *UnitPrice) SetFloat64(f float64) *UnitPrice {
-	*p = UnitPrice(int64(f * UnitPricePow))
+func (p *IntPrice) SetFloat64(f float64) *IntPrice {
+	*p = IntPrice(int64(f * IntPricePow))
 	return p
 }
 
-func (p UnitPrice) String() string {
+func (p IntPrice) String() string {
 	return strconv.FormatInt(int64(p), 10)
 }
 
-func (p UnitPrice) StringFloat() string {
-	return strconv.FormatFloat(p.Float64(), 'f', UnitPricePrecision, 64)
+func (p IntPrice) StringFloat() string {
+	return strconv.FormatFloat(p.Float64(), 'f', IntPricePrecision, 64)
 }
 
-func (p *UnitPrice) IsPositive() bool {
+func (p *IntPrice) IsPositive() bool {
 	return p.Int64() > 0
 }
 
-func (p *UnitPrice) IsNegative() bool {
+func (p *IntPrice) IsNegative() bool {
 	return p.Int64() < 0
 }
 
-func (p *UnitPrice) Zero() {
+func (p *IntPrice) Zero() {
 	p.SetInt64(0)
 }
 
-func (p *UnitPrice) IsZero() bool {
+func (p *IntPrice) IsZero() bool {
 	return p.Int64() == 0
 }
 
 // rounded p+q and returns p
-func (p *UnitPrice) Add(q UnitPrice) *UnitPrice {
+func (p *IntPrice) Add(q IntPrice) *IntPrice {
 	return p.SetInt64(p.Int64() + q.Int64())
 }
 
 // rounded p-q and returns p
-func (p *UnitPrice) Sub(q UnitPrice) *UnitPrice {
+func (p *IntPrice) Sub(q IntPrice) *IntPrice {
 	return p.SetInt64(p.Int64() - q.Int64())
 }
 
 // rounded product p*q and returns p
-func (p *UnitPrice) Mul(q UnitPrice) *UnitPrice {
+func (p *IntPrice) Mul(q IntPrice) *IntPrice {
 	return p.SetInt64(p.Int64() * q.Int64())
 }
 
 // rounded quotient p/q and returns p
-func (p *UnitPrice) Quo(q UnitPrice) *UnitPrice {
+func (p *IntPrice) Quo(q IntPrice) *IntPrice {
 	return p.SetInt64(p.Int64() / q.Int64())
 }
 
 // rounded p+x... and returns p
-func (p *UnitPrice) Sum(x ...UnitPrice) *UnitPrice {
+func (p *IntPrice) Sum(x ...IntPrice) *IntPrice {
 	for _, y := range x {
 		p.Add(y)
 	}
@@ -140,7 +140,7 @@ func (p *UnitPrice) Sum(x ...UnitPrice) *UnitPrice {
 }
 
 // rounded p-x... and returns p
-func (p *UnitPrice) Diff(x ...UnitPrice) *UnitPrice {
+func (p *IntPrice) Diff(x ...IntPrice) *IntPrice {
 	for _, y := range x {
 		p.Sub(y)
 	}
@@ -148,26 +148,26 @@ func (p *UnitPrice) Diff(x ...UnitPrice) *UnitPrice {
 }
 
 // rounded p+x... and returns
-func (p UnitPrice) GetSum(x ...UnitPrice) UnitPrice {
+func (p IntPrice) GetSum(x ...IntPrice) IntPrice {
 	sum := p.Int64()
 	for _, y := range x {
 		sum += y.Int64()
 	}
-	return NewUnitPrice(sum)
+	return NewIntPrice(sum)
 }
 
 // rounded p+x... and returns
-func (p UnitPrice) GetDiff(x ...UnitPrice) UnitPrice {
+func (p IntPrice) GetDiff(x ...IntPrice) IntPrice {
 	diff := p.Int64()
 	for _, y := range x {
 		diff -= y.Int64()
 	}
-	return NewUnitPrice(diff)
+	return NewIntPrice(diff)
 }
 
 // returns negation
-func (p UnitPrice) GetNegation() UnitPrice {
-	return NewUnitPrice(-p.Int64())
+func (p IntPrice) GetNegation() IntPrice {
+	return NewIntPrice(-p.Int64())
 }
 
 // Cmp compares p and p and returns:
@@ -176,7 +176,7 @@ func (p UnitPrice) GetNegation() UnitPrice {
 //    0 if p == p (incl. -0 == 0, -Inf == -Inf, and +Inf == +Inf)
 //   +1 if p >  p
 //
-func (p UnitPrice) Cmp(q UnitPrice) int {
+func (p IntPrice) Cmp(q IntPrice) int {
 	switch {
 	case p.Int64() < q.Int64():
 		return -1
