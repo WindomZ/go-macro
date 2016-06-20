@@ -30,6 +30,12 @@ func NewFloatPriceInt(i int64) FloatPrice {
 	return NewFloatPrice(float64(i) / FloatPricePow)
 }
 
+func NewFloatPriceString(value string) FloatPrice {
+	p := NewFloatPrice(0)
+	p.Scan(value)
+	return p
+}
+
 func (p *FloatPrice) MarshalJSON() ([]byte, error) {
 	if p == nil {
 		return nil, errors.New("MarshalJSON on nil pointer")

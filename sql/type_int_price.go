@@ -22,12 +22,18 @@ func SetIntPricePrecision(e int) {
 
 type IntPrice int64
 
-func NewIntPrice(i int64) IntPrice {
-	return IntPrice(i)
+func NewIntPrice(value int64) IntPrice {
+	return IntPrice(value)
 }
 
-func NewIntPriceFloat(f float64) IntPrice {
-	return NewIntPrice(int64(FloatFixed(f, IntPricePrecision) * IntPricePow))
+func NewIntPriceFloat(value float64) IntPrice {
+	return NewIntPrice(int64(FloatFixed(value, IntPricePrecision) * IntPricePow))
+}
+
+func NewIntPriceString(value string) IntPrice {
+	p := NewIntPrice(0)
+	p.Scan(value)
+	return p
 }
 
 func (p *IntPrice) MarshalJSON() ([]byte, error) {
