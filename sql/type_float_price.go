@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql/driver"
 	"errors"
+	. "github.com/WindomZ/go-macro/math"
 	"math"
 	"strconv"
 	"strings"
@@ -21,12 +22,12 @@ func SetFloatPricePrecision(e int) {
 
 type FloatPrice float64
 
-func NewFloatPrice(i float64) FloatPrice {
-	return FloatPrice(i)
+func NewFloatPrice(f float64) FloatPrice {
+	return FloatPrice(FloatFixed(f, FloatPricePrecision))
 }
 
 func NewFloatPriceInt(i int64) FloatPrice {
-	return FloatPrice(float64(i) / FloatPricePow)
+	return NewFloatPrice(float64(i) / FloatPricePow)
 }
 
 func (p *FloatPrice) MarshalJSON() ([]byte, error) {
@@ -58,15 +59,16 @@ func (p FloatPrice) Value() (driver.Value, error) {
 func (p *FloatPrice) Scan(src interface{}) error {
 	switch o := src.(type) {
 	case float32, float64:
-		*p = FloatPrice(o.(float64))
+		p.SetFloat64(o.(float64))
 	case int, int8, int16, int32, int64:
+		p.SetInt64(o.(int64))
 		*p = FloatPrice(o.(float64) / FloatPricePow)
 	case string:
-		i, err := strconv.ParseFloat(o, 64)
+		f, err := strconv.ParseFloat(o, 64)
 		if err != nil {
 			return err
 		}
-		*p = FloatPrice(i)
+		p.SetFloat64(f)
 	case []byte:
 		return p.Scan(string(o))
 	default:
@@ -80,8 +82,7 @@ func (p FloatPrice) Int64() int64 {
 }
 
 func (p *FloatPrice) SetInt64(i int64) *FloatPrice {
-	*p = FloatPrice(float64(i) / FloatPricePow)
-	return p
+	return p.SetFloat64(float64(i) / FloatPricePow)
 }
 
 func (p FloatPrice) Float64() float64 {
@@ -89,7 +90,7 @@ func (p FloatPrice) Float64() float64 {
 }
 
 func (p *FloatPrice) SetFloat64(f float64) *FloatPrice {
-	*p = FloatPrice(f)
+	*p = FloatPrice(FloatFixed(f, FloatPricePrecision))
 	return p
 }
 
