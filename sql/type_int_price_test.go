@@ -9,6 +9,7 @@ type testIntPrice struct {
 	Price1 IntPrice `json:"price1"`
 	Price2 IntPrice `json:"price2"`
 	Price3 IntPrice `json:"price3"`
+	Price4 IntPrice `json:"price4"`
 }
 
 func TestJSONIntPrice(t *testing.T) {
@@ -17,6 +18,7 @@ func TestJSONIntPrice(t *testing.T) {
 		Price1: NewIntPrice(101234),
 		Price2: NewIntPriceFloat(2.012345),
 		Price3: NewIntPriceString("301234"),
+		Price4: NewIntPriceFloatString("4.012345"),
 	}
 	t.Logf("%#v", p)
 	data, err := gojson.Marshal(p)

@@ -36,6 +36,13 @@ func NewIntPriceString(value string) IntPrice {
 	return p
 }
 
+func NewIntPriceFloatString(value string) IntPrice {
+	if f, err := strconv.ParseFloat(value, 64); err == nil {
+		return NewIntPriceFloat(f)
+	}
+	return NewIntPrice(0)
+}
+
 func (p *IntPrice) MarshalJSON() ([]byte, error) {
 	if p == nil {
 		return nil, errors.New("MarshalJSON on nil pointer")
