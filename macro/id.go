@@ -12,6 +12,10 @@ func ToId(id string) string {
 	return strings.ToLower(strings.TrimSpace(id))
 }
 
+func NoDashId(id string) string {
+	return strings.Replace(ToId(id), "-", "", -1)
+}
+
 func ValidId(id string) bool {
 	if IsEmpty(id) {
 		return false
