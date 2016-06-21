@@ -3,6 +3,7 @@ package def
 import (
 	"fmt"
 	"github.com/WindomZ/go-macro/uuid"
+	"strings"
 	"time"
 )
 
@@ -16,6 +17,10 @@ func GetDefaultTimeID() string {
 
 func GetDefaultOrderNo() string {
 	return fmt.Sprintf("%v%02d", time.Now().Format("060102150405"), tv())
+}
+
+func GetDefaultOrderUUID() string {
+	return strings.Replace(uuid.NewSafeUUID(), "-", "", -1)
 }
 
 func GetNumberId(id int64, n int) string {

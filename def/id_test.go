@@ -12,3 +12,7 @@ func TestGetNumberId(t *testing.T) {
 	t.Log(GetNumberId(1500, 10))
 	t.Log(GetNumberId(1500, 3))
 }
+
+func TestGetDefaultOrderUUID(t *testing.T) {
+	t.Log(GetDefaultOrderUUID())
+}
