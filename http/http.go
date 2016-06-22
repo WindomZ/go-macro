@@ -6,6 +6,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"strings"
@@ -44,7 +45,7 @@ func (s *HttpClient) setRequestHeader(r *http.Request) *http.Request {
 	return r
 }
 
-func (s *HttpClient) Post(url string, data interface{}) (*http.Response, error) {
+func (s *HttpClient) Post(uri string, data interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 	if data != nil {
 		j, err := json.Marshal(data)
@@ -53,7 +54,7 @@ func (s *HttpClient) Post(url string, data interface{}) (*http.Response, error) 
 		}
 		body = strings.NewReader(string(j))
 	}
-	req, err := http.NewRequest("POST", url, body)
+	req, err := http.NewRequest("POST", uri, body)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,15 @@ func (s *HttpClient) Post(url string, data interface{}) (*http.Response, error) 
 	return s.client.Do(req)
 }
 
-func (s *HttpClient) Put(url string, data interface{}) (*http.Response, error) {
+func (s *HttpClient) PostForm(uri string, data map[string]string) (*http.Response, error) {
+	value := make(url.Values)
+	for k, v := range data {
+		value.Set(k, v)
+	}
+	return http.PostForm(uri, value)
+}
+
+func (s *HttpClient) Put(uri string, data interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 	if data != nil {
 		j, err := json.Marshal(data)
@@ -70,7 +79,7 @@ func (s *HttpClient) Put(url string, data interface{}) (*http.Response, error) {
 		}
 		body = strings.NewReader(string(j))
 	}
-	req, err := http.NewRequest("PUT", url, body)
+	req, err := http.NewRequest("PUT", uri, body)
 	if err != nil {
 		return nil, err
 	}
@@ -78,15 +87,15 @@ func (s *HttpClient) Put(url string, data interface{}) (*http.Response, error) {
 	return s.client.Do(req)
 }
 
-func (s *HttpClient) Get(url string) (*http.Response, error) {
-	req, err := http.NewRequest("GET", url, nil)
+func (s *HttpClient) Get(uri string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		return nil, err
 	}
 	return s.client.Do(s.setRequestHeader(req))
 }
 
-func (s *HttpClient) Delete(url string, data interface{}) (*http.Response, error) {
+func (s *HttpClient) Delete(uri string, data interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 	if data != nil {
 		j, err := json.Marshal(data)
@@ -95,7 +104,7 @@ func (s *HttpClient) Delete(url string, data interface{}) (*http.Response, error
 		}
 		body = strings.NewReader(string(j))
 	}
-	req, err := http.NewRequest("DELETE", url, body)
+	req, err := http.NewRequest("DELETE", uri, body)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +112,7 @@ func (s *HttpClient) Delete(url string, data interface{}) (*http.Response, error
 	return s.client.Do(req)
 }
 
-func (s *HttpClient) PostFile(url string, filepath string) (*http.Response, error) {
+func (s *HttpClient) PostFile(uri string, filepath string) (*http.Response, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 	fh, err := os.Open(filepath)
@@ -124,7 +133,7 @@ func (s *HttpClient) PostFile(url string, filepath string) (*http.Response, erro
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest("POST", url, bodyBuf)
+	req, err := http.NewRequest("POST", uri, bodyBuf)
 	if err != nil {
 		return nil, err
 	}
@@ -132,8 +141,8 @@ func (s *HttpClient) PostFile(url string, filepath string) (*http.Response, erro
 	return s.client.Do(req)
 }
 
-func (s *HttpClient) GetFile(url string, filepath string) (*http.Response, error) {
-	req, err := http.NewRequest("GET", url, nil)
+func (s *HttpClient) GetFile(uri string, filepath string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		return nil, err
 	}
