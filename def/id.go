@@ -19,6 +19,10 @@ func GetDefaultOrderNo() string {
 	return fmt.Sprintf("%v%02d", time.Now().Format("060102150405"), tv100())
 }
 
+func GetDefaultOrderId() string {
+	return fmt.Sprintf("%v%04d", time.Now().Format("060102150405"), tv10000())
+}
+
 func GetDefaultOrderUUID() string {
 	return strings.Replace(uuid.NewSafeUUID(), "-", "", -1)
 }
