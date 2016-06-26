@@ -16,3 +16,15 @@ func TestGetNumberId(t *testing.T) {
 func TestGetDefaultOrderUUID(t *testing.T) {
 	t.Log(GetDefaultOrderUUID())
 }
+
+func TestGetDefaultTimeID(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		t.Log(GetDefaultTimeID())
+	}
+}
+
+func TestDefaultOrderNo(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		t.Log(GetDefaultOrderNo())
+	}
+}

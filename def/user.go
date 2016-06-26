@@ -10,7 +10,7 @@ func GetDefaultUsername(tag string) string {
 	if len(tag) == 0 {
 		tag = "u"
 	}
-	return fmt.Sprintf("%v%v%v", tag, time.Now().Unix(), tv())
+	return fmt.Sprintf("%v%v%v", tag, time.Now().Unix(), tv10())
 }
 
 func GetDefaultTel() string {
@@ -30,7 +30,7 @@ func GetDefaultBank() string {
 }
 
 func GetDefaultFormat(tag string) string {
-	return fmt.Sprintf("%v-%v%v", tag, time.Now().Unix(), tv())
+	return fmt.Sprintf("%v-%v%v", tag, time.Now().Unix(), tv10())
 }
 
 func GetDefaultSalt(n int) string {
