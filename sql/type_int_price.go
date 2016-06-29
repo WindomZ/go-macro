@@ -102,6 +102,10 @@ func (p IntPrice) Float64() float64 {
 	return float64(p) / IntPricePow
 }
 
+func (p IntPrice) ReciprocalFloat64() float64 {
+	return FloatFixed(1/p.Float64(), FloatPricePrecision)
+}
+
 func (p *IntPrice) SetFloat64(f float64) *IntPrice {
 	return p.SetInt64(int64(FloatFixed(f, IntPricePrecision) * IntPricePow))
 }
