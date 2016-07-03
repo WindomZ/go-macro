@@ -26,7 +26,12 @@ func NewIntPrice(value int64) IntPrice {
 	return IntPrice(value)
 }
 
-func NewIntPriceFloat(value float64) IntPrice {
+func NewIntPriceFloat(value float64, places ...int) IntPrice {
+	if value == 0 {
+		return NewIntPrice(0)
+	} else if places != nil && len(places) != 0 {
+		return NewIntPrice(int64(FloatFixed(value, places[0]) * IntPricePow))
+	}
 	return NewIntPrice(int64(FloatFixed(value, IntPricePrecision) * IntPricePow))
 }
 
@@ -102,11 +107,19 @@ func (p IntPrice) Float64() float64 {
 	return float64(p) / IntPricePow
 }
 
-func (p IntPrice) ReciprocalFloat64() float64 {
+func (p IntPrice) ReciprocalFloat64(places ...int) float64 {
+	if places != nil && len(places) != 0 {
+		return FloatFixed(1/p.Float64(), places[0])
+	}
 	return FloatFixed(1/p.Float64(), FloatPricePrecision)
 }
 
-func (p *IntPrice) SetFloat64(f float64) *IntPrice {
+func (p *IntPrice) SetFloat64(f float64, places ...int) *IntPrice {
+	if f == 0 {
+		return p.SetInt64(0)
+	} else if places != nil && len(places) != 0 {
+		return p.SetInt64(int64(FloatFixed(f, places[0]) * IntPricePow))
+	}
 	return p.SetInt64(int64(FloatFixed(f, IntPricePrecision) * IntPricePow))
 }
 

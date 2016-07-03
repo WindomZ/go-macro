@@ -22,21 +22,26 @@ func SetFloatPricePrecision(e int) {
 
 type FloatPrice float64
 
-func NewFloatPrice(f float64) FloatPrice {
+func NewFloatPrice(f float64, places ...int) FloatPrice {
+	if f == 0 {
+		return FloatPrice(0)
+	} else if places != nil && len(places) != 0 {
+		return FloatPrice(FloatFixed(f, places[0]))
+	}
 	return FloatPrice(FloatFixed(f, FloatPricePrecision))
 }
 
-func NewFloatPriceInt(i int64) FloatPrice {
-	return NewFloatPrice(float64(i) / FloatPricePow)
+func NewFloatPriceInt(i int64, places ...int) FloatPrice {
+	return NewFloatPrice(float64(i)/FloatPricePow, places...)
 }
 
-func NewFloatPriceString(value string) FloatPrice {
+func NewFloatPriceString(value string, places ...int) FloatPrice {
 	p := NewFloatPrice(0)
 	p.Scan(value)
 	return p
 }
 
-func NewFloatPriceIntString(value string) FloatPrice {
+func NewFloatPriceIntString(value string, places ...int) FloatPrice {
 	if i, err := strconv.ParseInt(value, 10, 64); err == nil {
 		return NewFloatPriceInt(i)
 	}
@@ -75,7 +80,6 @@ func (p *FloatPrice) Scan(src interface{}) error {
 		p.SetFloat64(o.(float64))
 	case int, int8, int16, int32, int64:
 		p.SetInt64(o.(int64))
-		*p = FloatPrice(o.(float64) / FloatPricePow)
 	case string:
 		f, err := strconv.ParseFloat(o, 64)
 		if err != nil {
@@ -94,20 +98,23 @@ func (p FloatPrice) Int64() int64 {
 	return int64(p.Float64() * FloatPricePow)
 }
 
-func (p *FloatPrice) SetInt64(i int64) *FloatPrice {
-	return p.SetFloat64(float64(i) / FloatPricePow)
+func (p *FloatPrice) SetInt64(i int64, places ...int) *FloatPrice {
+	return p.SetFloat64(float64(i)/FloatPricePow, places...)
 }
 
 func (p FloatPrice) Float64() float64 {
 	return float64(p)
 }
 
-func (p FloatPrice) ReciprocalFloat64() float64 {
+func (p FloatPrice) ReciprocalFloat64(places ...int) float64 {
+	if places != nil && len(places) != 0 {
+		return FloatFixed(1/p.Float64(), places[0])
+	}
 	return FloatFixed(1/p.Float64(), FloatPricePrecision)
 }
 
-func (p *FloatPrice) SetFloat64(f float64) *FloatPrice {
-	*p = FloatPrice(FloatFixed(f, FloatPricePrecision))
+func (p *FloatPrice) SetFloat64(f float64, places ...int) *FloatPrice {
+	*p = NewFloatPrice(f, places...)
 	return p
 }
 
