@@ -75,6 +75,9 @@ func (p FloatPrice) Value() (driver.Value, error) {
 }
 
 func (p *FloatPrice) Scan(src interface{}) error {
+	if src == nil {
+		return nil
+	}
 	switch o := src.(type) {
 	case float32, float64:
 		p.SetFloat64(o.(float64))
