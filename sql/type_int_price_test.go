@@ -32,3 +32,13 @@ func TestJSONIntPrice(t *testing.T) {
 	}
 	t.Logf("%#v", pp)
 }
+
+func TestIntPrice_GetNegation(t *testing.T) {
+	var i int64 = 0
+	for ; i < 1000000; i++ {
+		p := NewIntPrice(i)
+		if p.Int64() != i || p.Int64() != -p.GetNegation().Int64() {
+			t.Fatalf("%v:%v:%v:%v", i, p.Int64(), p.GetNegation().Int64(), -p.GetNegation().Int64())
+		}
+	}
+}

@@ -98,7 +98,7 @@ func (p *FloatPrice) Scan(src interface{}) error {
 }
 
 func (p FloatPrice) Int64() int64 {
-	return int64(p.Float64() * FloatPricePow)
+	return int64(FloatFixed(p.Float64()*FloatPricePow, FloatPricePrecision))
 }
 
 func (p *FloatPrice) SetInt64(i int64, places ...int) *FloatPrice {

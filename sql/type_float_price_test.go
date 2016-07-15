@@ -32,3 +32,14 @@ func TestJSONFloatPrice(t *testing.T) {
 	}
 	t.Logf("%#v", pp)
 }
+
+func TestFloatPrice_GetNegation(t *testing.T) {
+	SetFloatPricePrecision(8)
+	var i int64 = 0
+	for ; i < 1000000; i++ {
+		p := NewFloatPriceInt(i)
+		if p.Int64() != i || p.Float64() != -p.GetNegation().Float64() {
+			t.Fatalf("%v:%v:%v:%v:%v", i, p.Int64(), p.Float64(), p.GetNegation().Float64(), -p.GetNegation().Float64())
+		}
+	}
+}
