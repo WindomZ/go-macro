@@ -26,3 +26,7 @@ func FloatFixed(value float64, places int) float64 {
 	f, _ := decimal.NewFromFloat(value).Round(int32(places)).Float64()
 	return f
 }
+
+func FloatFixedToInt(value float64, places int) int64 {
+	return decimal.NewFromFloat(value).Mul(decimal.New(1, int32(places))).Round(0).IntPart()
+}

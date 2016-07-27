@@ -4,24 +4,36 @@ import "testing"
 
 func TestFloatPrecision(t *testing.T) {
 	var f float64 = 2.012345
-	t.Log(f)
-	t.Log(FloatPrecision(f, 5, true))
+	if r := FloatPrecision(f, 5, true); r != 2.01235 {
+		t.Fatalf("Error %#v", r)
+	}
 }
 
 func TestFloatRound(t *testing.T) {
 	var f float64 = 2.012345
-	t.Log(f)
-	t.Log(FloatRound(f, 5))
+	if r := FloatRound(f, 5); r != 2.01235 {
+		t.Fatalf("Error %#v", r)
+	}
 }
 
 func TestFloatFixed(t *testing.T) {
 	var f float64 = 2.012345
-	t.Log(f)
-	t.Log(FloatFixed(f, 5))
+	if r := FloatFixed(f, 5); r != 2.01235 {
+		t.Fatalf("Error %#v", r)
+	}
+	f = 4.012345
+	if r := FloatFixed(f, 5); r != 4.01235 {
+		t.Fatalf("Error %#v", r)
+	}
 }
 
-func TestFloat(t *testing.T) {
-	t.Log(1.012345, FloatPrecision(1.012345, 5, true), FloatRound(1.012345, 5), FloatFixed(1.012345, 5))
-	t.Log(2.012345, FloatPrecision(2.012345, 5, true), FloatRound(2.012345, 5), FloatFixed(2.012345, 5))
-	t.Log(3.012345, FloatPrecision(3.012345, 5, true), FloatRound(3.012345, 5), FloatFixed(3.012345, 5))
+func TestFloatFixedToInt(t *testing.T) {
+	var f float64 = 2.012345
+	if r := FloatFixedToInt(f, 5); r != 201235 {
+		t.Fatalf("Error %#v", r)
+	}
+	f = 4.012345
+	if r := FloatFixedToInt(f, 5); r != 401235 {
+		t.Fatalf("Error %#v", r)
+	}
 }
