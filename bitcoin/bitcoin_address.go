@@ -28,6 +28,11 @@ func GenerateBitCoinAddressWith(data []byte) string {
 	return newSafeBitCoinAddress(data)
 }
 
+func GenerateBitCoinAddressWithPrefix(pre string) string {
+	add := GenerateBitCoinAddressWith([]byte(pre))
+	return pre + add[len(pre):]
+}
+
 func newSafeBitCoinAddress(data []byte) string {
 	mutex.Lock()
 	defer mutex.Unlock()
