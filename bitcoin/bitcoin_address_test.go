@@ -31,3 +31,14 @@ func TestGenerateBitCoinAddressWith(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateBitCoinAddressWithPrefix(t *testing.T) {
+	m := make(map[string]bool)
+	for i := 0; i < 100; i++ {
+		address := GenerateBitCoinAddressWithPrefix("ABCDF")
+		//t.Log(address)
+		if _, ok := m[address]; ok {
+			t.Fatalf("Duplicate address: %v", address)
+		}
+	}
+}
