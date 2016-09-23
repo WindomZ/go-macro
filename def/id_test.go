@@ -29,6 +29,12 @@ func TestGetDefaultTimeId(t *testing.T) {
 	}
 }
 
+func TestGetDefaultTimeId20(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		t.Log(GetDefaultTimeId20())
+	}
+}
+
 func TestGetDefaultOrderNo(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		t.Log(GetDefaultOrderNo())

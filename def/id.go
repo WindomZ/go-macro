@@ -19,6 +19,10 @@ func GetDefaultTimeId() string {
 	return fmt.Sprintf("%v%04d", time.Now().Format("060102150405"), tv10000())
 }
 
+func GetDefaultTimeId20() string {
+	return fmt.Sprintf("%v%08d", time.Now().Format("060102150405"), tv100000000())
+}
+
 func GetDefaultOrderNo() string {
 	return fmt.Sprintf("%v%02d", time.Now().Format("060102150405"), tv100())
 }
