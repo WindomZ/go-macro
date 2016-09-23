@@ -35,6 +35,10 @@ func ValidTimeId(id string) bool {
 	return len(id) == 16
 }
 
+func ValidTimeId20(id string) bool {
+	return len(id) == 20
+}
+
 func ValidOrderNo(id string) bool {
 	return len(id) == 14
 }
